@@ -6,6 +6,8 @@ This module provides tools for stream processing, data pipelines, and field oper
 
 Foundational Principle: i.f(I) = I = f(x)
 Where identity is preserved through transformation AND identity is itself functional.
+
+64-Bit Encoding: Complete system representation in exactly 64 bits with quantum support.
 """
 
 from .stream_processor import StreamProcessor, FieldStream, DataPipeline
@@ -18,6 +20,17 @@ from .identity_field import (
     SagaIdentityTheorem,
     IdentityFieldAlgebra,
     identity_field_transform
+)
+from .saga_64bit import (
+    Saga64BitField,
+    SagaFieldType,
+    SagaFlags,
+    SagaQubit,
+    SagaQuantum64,
+    SagaLogEntry,
+    SagaSelfRefLog,
+    Saga64Units,
+    SagaReferenceGraph
 )
 
 __all__ = [
@@ -35,8 +48,17 @@ __all__ = [
     'FunctionalIdentity',
     'SagaIdentityTheorem',
     'IdentityFieldAlgebra',
-    'identity_field_transform'
+    'identity_field_transform',
+    'Saga64BitField',
+    'SagaFieldType',
+    'SagaFlags',
+    'SagaQubit',
+    'SagaQuantum64',
+    'SagaLogEntry',
+    'SagaSelfRefLog',
+    'Saga64Units',
+    'SagaReferenceGraph'
 ]
 
-__version__ = '1.1.0'
+__version__ = '2.0.0'
 __author__ = 'PAUL RUTHERFORDS'
