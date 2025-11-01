@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solarpunk Space - Web Edition</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1525 0%, #2a3545 100%);
+            font-family: 'Arial', sans-serif;
+            color: #c8ffd8;
+        }
+
+        #gameContainer {
+            text-align: center;
+        }
+
+        canvas {
+            border: 3px solid #b4a0ff;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(180, 160, 255, 0.3);
+            background: #19141f;
+        }
+
+        #ui {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        #score {
+            font-size: 24px;
+            color: #ffd864;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        #instructions {
+            font-size: 14px;
+            color: #b4a0ff;
+            margin-top: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #64c8b4 0%, #50a090 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(100, 200, 180, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(100, 200, 180, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        h1 {
+            color: #b4a0ff;
+            text-shadow: 0 0 20px rgba(180, 160, 255, 0.5);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <h1>☀️ Solarpunk Space ☀️</h1>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="ui">
+            <div id="score">Solar Energy: 0</div>
+            <div id="instructions">
+                Use Arrow Keys or WASD to move • Collect orbs • Avoid debris
+            </div>
+            <button class="btn" id="restartBtn" style="display: none;">Restart Mission</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
