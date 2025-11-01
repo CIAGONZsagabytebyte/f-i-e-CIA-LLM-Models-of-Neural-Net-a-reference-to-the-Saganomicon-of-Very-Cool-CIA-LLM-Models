@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solarpunk Space - Web Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0519 0%, #1a0f2e 100%);
+            font-family: 'Courier New', monospace;
+            color: #96ffb4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin: 20px 0;
+            text-shadow: 0 0 10px #96ffb4;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            margin-bottom: 20px;
+            color: #64c896;
+            font-size: 0.9em;
+        }
+
+        #gameCanvas {
+            border: 3px solid #64c896;
+            box-shadow: 0 0 20px rgba(100, 200, 150, 0.5);
+            background: radial-gradient(circle at 30% 30%, #1a0f2e, #0a0519);
+        }
+
+        .info {
+            margin-top: 20px;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .controls {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(100, 200, 150, 0.1);
+            border-radius: 5px;
+        }
+
+        .math-note {
+            margin-top: 15px;
+            font-size: 0.85em;
+            color: #ffc864;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>⚡ SOLARPUNK SPACE ⚡</h1>
+    <div class="subtitle">Ring-0 Control | f(i) = -i | No Neurons Edition</div>
+
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <div class="info">
+        <div class="controls">
+            <strong>Controls:</strong> Arrow Keys or WASD to move | Click to restart after game over
+        </div>
+        <div class="math-note">
+            Mathematical Engine: Complex Rotations • Harmonic Oscillators • Toroidal Topology
+        </div>
+    </div>
+
+    <script>
+        // ===== MATHEMATICAL FOUNDATION =====
+        // Complex number operations, ring theory, functional transforms
+        // NO NEURAL NETWORKS OR UNITS
+
+        const ComplexMath = {
+            // Rotate point using complex multiplication: z * e^(iθ)
+            rotate(x, y, angle) {
+                const cos = Math.cos(angle);
+                const sin = Math.sin(angle);
+                return {
+                    x: x * cos - y * sin,
+                    y: x * sin + y * cos
+                };
+            },
+
+            // f(i) = -i transformation (conjugate)
+            conjugate(x, y) {
+                return { x: x, y: -y };
+            },
+
+            // Ring-0 kernel operation (modular wrapping)
+            ringKernel(value, modulus) {
+                return ((value % modulus) + modulus) % modulus;
+            },
+
+            // Harmonic oscillator: f(t) = A·sin(ωt + φ)
+            harmonicOscillator(t, amplitude, frequency, phase) {
+                return amplitude * Math.sin(frequency * t + phase);
+            }
+        };
+
+        // ===== GAME SETUP =====
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const game = {
+            running: true,
+            gameOver: false,
+            score: 0,
+            highScore: 0,
+            time: 0,
+
+            player: {
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                vx: 0,
+                vy: 0,
+                speed: 250,
+                size: 20,
+                rotation: 0,
+                trail: []
+            },
+
+            orbs: [],
+            debris: [],
+            stars: [],
+
+            keys: {}
+        };
+
+        // ===== INITIALIZATION =====
+        function init() {
+            // Create background stars with depth
+            for (let i = 0; i < 100; i++) {
+                game.stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    depth: Math.random(),
+                    size: Math.random() < 0.5 ? 1 : 2
+                });
+            }
+
+            resetGame();
+        }
+
+        function resetGame() {
+            game.gameOver = false;
+            if (game.score > game.highScore) {
+                game.highScore = game.score;
+            }
+            game.score = 0;
+            game.time = 0;
+
+            // Reset player
+            game.player.x = canvas.width / 2;
+            game.player.y = canvas.height / 2;
+            game.player.vx = 0;
+            game.player.vy = 0;
+            game.player.trail = [];
+
+            // Create solar orbs
+            game.orbs = [];
+            for (let i = 0; i < 8; i++) {
+                game.orbs.push({
+                    x: Math.random() * (canvas.width - 100) + 50,
+                    y: Math.random() * (canvas.height - 100) + 50,
+                    radius: 12,
+                    phase: Math.random() * Math.PI * 2,
+                    pulseRate: 2.0
+                });
+            }
+
+            // Create debris
+            game.debris = [];
+            for (let i = 0; i < 5; i++) {
+                const sides = Math.floor(Math.random() * 4) + 5;
+                const vertices = [];
+                for (let j = 0; j < sides; j++) {
+                    const angle = (j / sides) * Math.PI * 2;
+                    const radius = 20 + Math.random() * 15;
+                    vertices.push({
+                        x: radius * Math.cos(angle),
+                        y: radius * Math.sin(angle)
+                    });
+                }
+
+                game.debris.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 60,
+                    vy: (Math.random() - 0.5) * 60,
+                    size: 25,
+                    rotation: Math.random() * Math.PI * 2,
+                    rotationSpeed: (Math.random() - 0.5) * 2,
+                    vertices: vertices
+                });
+            }
+        }
+
+        // ===== UPDATE LOGIC =====
+        function update(dt) {
+            if (game.gameOver) return;
+
+            game.time += dt;
+
+            // Player movement using directional transforms
+            let dx = 0, dy = 0;
+            if (game.keys['ArrowLeft'] || game.keys['a']) dx -= 1;
+            if (game.keys['ArrowRight'] || game.keys['d']) dx += 1;
+            if (game.keys['ArrowUp'] || game.keys['w']) dy -= 1;
+            if (game.keys['ArrowDown'] || game.keys['s']) dy += 1;
+
+            // Normalize diagonal movement
+            if (dx !== 0 && dy !== 0) {
+                const len = Math.sqrt(dx * dx + dy * dy);
+                dx /= len;
+                dy /= len;
+            }
+
+            game.player.vx = dx * game.player.speed;
+            game.player.vy = dy * game.player.speed;
+
+            // Update player position
+            game.player.x += game.player.vx * dt;
+            game.player.y += game.player.vy * dt;
+
+            // Ring-0 wrapping (toroidal topology)
+            game.player.x = ComplexMath.ringKernel(game.player.x, canvas.width);
+            game.player.y = ComplexMath.ringKernel(game.player.y, canvas.height);
+
+            // Update rotation
+            if (dx !== 0 || dy !== 0) {
+                game.player.rotation = Math.atan2(dy, dx) + Math.PI / 2;
+            }
+
+            // Add trail particle
+            if (Math.random() < 0.3) {
+                game.player.trail.push({
+                    x: game.player.x,
+                    y: game.player.y,
+                    life: 1.0
+                });
+            }
+
+            // Update trail
+            game.player.trail = game.player.trail.filter(p => {
+                p.life -= dt * 2;
+                return p.life > 0;
+            });
+
+            // Update stars (parallax)
+            game.stars.forEach(star => {
+                star.x -= game.player.vx * star.depth * dt * 0.5;
+                star.y -= game.player.vy * star.depth * dt * 0.5;
+                star.x = ComplexMath.ringKernel(star.x, canvas.width);
+                star.y = ComplexMath.ringKernel(star.y, canvas.height);
+            });
+
+            // Update orbs (harmonic oscillation)
+            game.orbs.forEach(orb => {
+                orb.phase += orb.pulseRate * dt;
+                orb.radius = 12 + ComplexMath.harmonicOscillator(orb.phase, 3, 1, 0);
+
+                // Check collection
+                const dist = Math.sqrt(
+                    (game.player.x - orb.x) ** 2 +
+                    (game.player.y - orb.y) ** 2
+                );
+                if (dist < game.player.size + orb.radius) {
+                    game.score += 10;
+                    // Respawn orb
+                    orb.x = Math.random() * (canvas.width - 100) + 50;
+                    orb.y = Math.random() * (canvas.height - 100) + 50;
+                }
+            });
+
+            // Update debris
+            game.debris.forEach(d => {
+                d.x += d.vx * dt;
+                d.y += d.vy * dt;
+                d.rotation += d.rotationSpeed * dt;
+
+                // Ring-0 wrapping
+                d.x = ComplexMath.ringKernel(d.x, canvas.width);
+                d.y = ComplexMath.ringKernel(d.y, canvas.height);
+
+                // Check collision
+                const dist = Math.sqrt(
+                    (game.player.x - d.x) ** 2 +
+                    (game.player.y - d.y) ** 2
+                );
+                if (dist < game.player.size + d.size) {
+                    game.gameOver = true;
+                }
+            });
+        }
+
+        // ===== RENDERING =====
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = '#0a0519';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw stars
+            game.stars.forEach(star => {
+                const brightness = Math.floor(100 + star.depth * 155);
+                ctx.fillStyle = `rgb(${brightness}, ${brightness}, ${brightness})`;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Draw orbs
+            game.orbs.forEach(orb => {
+                // Glow
+                const gradient = ctx.createRadialGradient(
+                    orb.x, orb.y, 0,
+                    orb.x, orb.y, orb.radius * 1.5
+                );
+                gradient.addColorStop(0, 'rgba(255, 255, 150, 0.8)');
+                gradient.addColorStop(0.5, 'rgba(255, 220, 100, 0.5)');
+                gradient.addColorStop(1, 'rgba(255, 200, 50, 0)');
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(orb.x, orb.y, orb.radius * 1.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Core
+                ctx.fillStyle = '#ffff96';
+                ctx.beginPath();
+                ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#ffc832';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+
+            // Draw debris
+            game.debris.forEach(d => {
+                ctx.save();
+                ctx.translate(d.x, d.y);
+                ctx.rotate(d.rotation);
+
+                ctx.fillStyle = '#785028';
+                ctx.strokeStyle = '#a07850';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                d.vertices.forEach((v, i) => {
+                    if (i === 0) ctx.moveTo(v.x, v.y);
+                    else ctx.lineTo(v.x, v.y);
+                });
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.restore();
+            });
+
+            // Draw player trail
+            game.player.trail.forEach(p => {
+                ctx.fillStyle = `rgba(100, 255, 150, ${p.life * 0.5})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Draw player ship
+            ctx.save();
+            ctx.translate(game.player.x, game.player.y);
+            ctx.rotate(game.player.rotation);
+
+            ctx.fillStyle = '#64ff96';
+            ctx.strokeStyle = '#c8ffdc';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, -game.player.size);
+            ctx.lineTo(-game.player.size * 0.6, game.player.size);
+            ctx.lineTo(game.player.size * 0.6, game.player.size);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.restore();
+
+            // Draw UI
+            ctx.fillStyle = '#96ffb4';
+            ctx.font = '24px Courier New';
+            ctx.fillText(`Energy: ${game.score}`, 10, 30);
+            ctx.font = '16px Courier New';
+            ctx.fillText(`High: ${game.highScore}`, 10, 55);
+
+            // Game over
+            if (game.gameOver) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#ff6464';
+                ctx.font = 'bold 48px Courier New';
+                ctx.textAlign = 'center';
+                ctx.fillText('SYSTEM CRASH', canvas.width / 2, canvas.height / 2 - 40);
+
+                ctx.fillStyle = '#96ffb4';
+                ctx.font = '32px Courier New';
+                ctx.fillText(`Final Energy: ${game.score}`, canvas.width / 2, canvas.height / 2 + 10);
+
+                ctx.font = '20px Courier New';
+                ctx.fillText('Click to Restart', canvas.width / 2, canvas.height / 2 + 60);
+                ctx.textAlign = 'left';
+            }
+        }
+
+        // ===== GAME LOOP =====
+        let lastTime = 0;
+        function gameLoop(timestamp) {
+            const dt = Math.min((timestamp - lastTime) / 1000, 0.1);
+            lastTime = timestamp;
+
+            update(dt);
+            draw();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // ===== INPUT HANDLING =====
+        window.addEventListener('keydown', e => {
+            game.keys[e.key] = true;
+        });
+
+        window.addEventListener('keyup', e => {
+            game.keys[e.key] = false;
+        });
+
+        canvas.addEventListener('click', () => {
+            if (game.gameOver) {
+                resetGame();
+            }
+        });
+
+        // ===== START GAME =====
+        init();
+        requestAnimationFrame(gameLoop);
+
+        console.log('🌿 Solarpunk Space - Mathematical Engine Initialized');
+        console.log('📐 f(i) = -i | Ring-0 Control | No Neurons');
+    </script>
+</body>
+</html>

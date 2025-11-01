@@ -1,0 +1,12 @@
+# Solarpunk Space Starter Kit - Python Dependencies
+# Install with: pip install -r solarpunk_requirements.txt
+
+# For Pygame prototype (playable 2D game)
+pygame>=2.5.0
+
+# For Binary Art Generator (procedural textures)
+Pillow>=10.0.0
+
+# Optional: For better development experience
+# pytest>=7.0.0  # For testing
+# black>=23.0.0  # For code formatting
