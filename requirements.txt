@@ -1,5 +1,11 @@
 # Python 3.7+
-# No external dependencies required for core functionality
+# Core dependencies for Solarpunk Space Starter Kit
+
+# Pygame prototype dependencies
+pygame>=2.5.0
+
+# Binary art generator dependencies
+Pillow>=10.0.0
 
 # Optional dependencies for testing
 pytest>=7.0.0
