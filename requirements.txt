@@ -1,0 +1,11 @@
+# Python 3.7+
+# No external dependencies required for core functionality
+
+# Optional dependencies for testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Optional dependencies for development
+black>=22.0.0
+flake8>=5.0.0
+mypy>=0.990
