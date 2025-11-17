@@ -1,0 +1,434 @@
+/* Solarpunk Space Theme - Optimistic Future Aesthetic */
+
+:root {
+  --solar-green: #7FFF00;
+  --space-blue: #1E90FF;
+  --cosmic-purple: #9370DB;
+  --solar-gold: #FFD700;
+  --earth-teal: #20B2AA;
+  --nebula-pink: #FF69B4;
+  --star-white: #F0F8FF;
+}
+
+body {
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1419 100%);
+  color: var(--solar-green);
+  font-family: 'Courier New', monospace;
+  line-height: 1.6;
+  padding: 20px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated star field background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, white, transparent),
+    radial-gradient(2px 2px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 33% 80%, white, transparent);
+  background-size: 200% 200%;
+  animation: stars 60s linear infinite;
+  opacity: 0.3;
+  z-index: -1;
+}
+
+@keyframes stars {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+h1, h2 {
+  background: linear-gradient(90deg, var(--solar-green), var(--solar-gold), var(--space-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(127, 255, 0, 0.5);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}
+
+.solar-panel {
+  background: linear-gradient(135deg, 
+    rgba(127, 255, 0, 0.1) 0%, 
+    rgba(30, 144, 255, 0.1) 50%, 
+    rgba(255, 215, 0, 0.1) 100%);
+  border: 2px solid var(--solar-green);
+  border-radius: 15px;
+  padding: 30px;
+  margin: 30px 0;
+  box-shadow: 
+    0 0 20px rgba(127, 255, 0, 0.3),
+    inset 0 0 20px rgba(30, 144, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.solar-panel::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 215, 0, 0.1) 50%,
+    transparent 70%
+  );
+  animation: solar-sweep 4s linear infinite;
+}
+
+@keyframes solar-sweep {
+  0% { transform: translateX(-100%) translateY(-100%); }
+  100% { transform: translateX(100%) translateY(100%); }
+}
+
+.space-station {
+  background: rgba(10, 14, 39, 0.8);
+  border: 2px solid var(--space-blue);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 30px rgba(30, 144, 255, 0.4);
+}
+
+.orbital-ring {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+  justify-content: center;
+}
+
+.planet-bit {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.planet-bit::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.planet-bit:hover::after {
+  width: 150%;
+  height: 150%;
+  opacity: 0.5;
+  box-shadow: 0 0 20px currentColor;
+}
+
+.planet-bit-0 {
+  background: radial-gradient(circle at 30% 30%, var(--space-blue), #0a0e27);
+  border: 2px solid var(--space-blue);
+  color: var(--star-white);
+  box-shadow: 0 0 10px var(--space-blue);
+}
+
+.planet-bit-1 {
+  background: radial-gradient(circle at 30% 30%, var(--solar-gold), var(--solar-green));
+  color: #0a0e27;
+  box-shadow: 0 0 15px var(--solar-gold);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 15px var(--solar-gold); }
+  50% { box-shadow: 0 0 25px var(--solar-gold), 0 0 35px var(--solar-green); }
+}
+
+.terraform-indicator {
+  text-align: center;
+  font-size: 2rem;
+  margin: 20px 0;
+  animation: terraform-pulse 3s ease-in-out infinite;
+  background: linear-gradient(90deg, var(--solar-green), var(--earth-teal), var(--space-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes terraform-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
+}
+
+.warp-drive {
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+  border: 2px solid var(--cosmic-purple);
+  border-radius: 15px;
+  margin: 30px 0;
+  background: radial-gradient(ellipse at center, rgba(147, 112, 219, 0.2) 0%, transparent 70%);
+}
+
+.warp-layer {
+  position: absolute;
+  width: 100%;
+  animation: warp-speed 15s linear infinite;
+}
+
+@keyframes warp-speed {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-50%) scale(0.5); opacity: 0; }
+}
+
+.warp-layer:nth-child(2) {
+  animation-delay: -7.5s;
+}
+
+.control-hub {
+  background: linear-gradient(135deg, rgba(127, 255, 0, 0.1), rgba(30, 144, 255, 0.1));
+  padding: 25px;
+  border: 2px solid var(--solar-green);
+  border-radius: 15px;
+  margin: 25px 0;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(127, 255, 0, 0.2);
+}
+
+.nav-button {
+  background: linear-gradient(135deg, var(--solar-green), var(--earth-teal));
+  color: #0a0e27;
+  border: none;
+  padding: 12px 24px;
+  margin: 8px;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(127, 255, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.nav-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.nav-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(127, 255, 0, 0.5);
+}
+
+.nav-button:active {
+  transform: translateY(0);
+}
+
+.biodome {
+  background: radial-gradient(ellipse at center, 
+    rgba(127, 255, 0, 0.15) 0%, 
+    rgba(32, 178, 170, 0.1) 50%, 
+    transparent 100%);
+  border: 2px solid var(--earth-teal);
+  border-radius: 50%;
+  padding: 40px;
+  margin: 30px auto;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 
+    0 0 40px rgba(32, 178, 170, 0.3),
+    inset 0 0 40px rgba(127, 255, 0, 0.1);
+}
+
+.growth-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin: 25px 0;
+}
+
+.stat-pod {
+  background: rgba(10, 14, 39, 0.6);
+  border: 2px solid var(--solar-green);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.stat-pod:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(127, 255, 0, 0.4);
+  border-color: var(--solar-gold);
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, var(--solar-green), var(--solar-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(127, 255, 0, 0.5);
+  animation: count-up 2s ease-out;
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--earth-teal);
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mission-log {
+  background: rgba(10, 14, 39, 0.8);
+  border-left: 4px solid var(--solar-green);
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 5px;
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 20px rgba(127, 255, 0, 0.2);
+}
+
+.constellation-link {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  animation: twinkle 2s ease-in-out infinite;
+  background: rgba(10, 14, 39, 0.8);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid var(--space-blue);
+  backdrop-filter: blur(10px);
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.nebula-effect {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.15;
+  background: 
+    radial-gradient(ellipse at 20% 30%, var(--cosmic-purple) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, var(--nebula-pink) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, var(--space-blue) 0%, transparent 50%);
+  animation: nebula-drift 30s ease-in-out infinite alternate;
+}
+
+@keyframes nebula-drift {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(50px, 30px) scale(1.1); }
+}
+
+.quantum-garden {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 25px 0;
+  padding: 20px;
+  background: rgba(127, 255, 0, 0.05);
+  border-radius: 15px;
+  border: 1px solid var(--solar-green);
+}
+
+.seed-node {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, var(--solar-green), var(--earth-teal));
+  box-shadow: 0 0 15px var(--solar-green);
+  animation: grow-bloom 3s ease-in-out infinite;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.seed-node:hover {
+  transform: scale(1.3);
+  box-shadow: 0 0 30px var(--solar-gold);
+}
+
+@keyframes grow-bloom {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
+}
+
+/* Responsive design for smaller viewports */
+@media (max-width: 768px) {
+  .growth-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .nav-button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+  }
+  
+  .biodome {
+    padding: 20px;
+  }
+}
+</style>
